@@ -3,7 +3,7 @@ import torch.nn as nn
 
 import common
 
-SEED = 0
+SEED = common.get_seed()
 common.set_determinism(SEED)
 X, y, order = common.load_pool(SEED)
 tr, va = order[:1000], order[1000:1300]
