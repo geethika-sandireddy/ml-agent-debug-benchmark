@@ -92,6 +92,7 @@ def run_script(
             capture_output=True,
             text=True,
             timeout=timeout_s,
+            check=False,
             preexec_fn=preexec,
         )
         return RunResult(
