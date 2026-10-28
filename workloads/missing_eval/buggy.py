@@ -1,14 +1,13 @@
-import torch
-import torch.nn as nn
-
 import common
+import torch
+from torch import nn
 
 SEED = common.get_seed()
 common.set_determinism(SEED)
 X, y, order = common.load_pool(SEED)
 tr, va = order[:1000], order[1000:1300]
 mean, std = X[tr].mean(0), X[tr].std(0) + 1e-6
-norm = lambda a: (a - mean) / std  # noqa: E731
+norm = lambda a: (a - mean) / std
 
 model = nn.Sequential(nn.Linear(64, 128), nn.ReLU(), nn.Dropout(0.7), nn.Linear(128, 10))
 loss_fn = nn.CrossEntropyLoss()

@@ -1,7 +1,6 @@
-import torch
-import torch.nn as nn
-
 import common
+import torch
+from torch import nn
 
 SEED = common.get_seed()
 common.set_determinism(SEED)

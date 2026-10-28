@@ -1,8 +1,7 @@
+import common
 import numpy as np
 import torch
-import torch.nn as nn
-
-import common
+from torch import nn
 
 SEED = common.get_seed()
 common.set_determinism(SEED)
@@ -10,7 +9,7 @@ X, y, order = common.load_pool(SEED)
 train_idx = order[:150]
 val_idx = np.concatenate([order[150:250], order[:100]])
 mean, std = X[train_idx].mean(0), X[train_idx].std(0) + 1e-6
-norm = lambda a: (a - mean) / std  # noqa: E731
+norm = lambda a: (a - mean) / std
 
 Xtr, ytr = norm(X[train_idx]), y[train_idx]
 Xva, yva = norm(X[val_idx]), y[val_idx]
