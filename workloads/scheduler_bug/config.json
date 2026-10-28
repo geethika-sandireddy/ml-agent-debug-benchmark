@@ -1,0 +1,10 @@
+{
+  "id": "scheduler_bug",
+  "title": "Scheduler stepped per batch",
+  "symptom": "Learning rate decays to about zero and the loss flatlines",
+  "diagnosis": "scheduler_per_batch",
+  "seed": 0,
+  "metric": "hidden_acc",
+  "threshold": null,
+  "require_zero_overlap": false
+}

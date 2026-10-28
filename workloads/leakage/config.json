@@ -1,0 +1,10 @@
+{
+  "id": "leakage",
+  "title": "Train/validation leakage",
+  "symptom": "Validation accuracy looks suspiciously high compared to held-out data",
+  "diagnosis": "data_leakage",
+  "seed": 0,
+  "metric": "hidden_acc",
+  "threshold": null,
+  "require_zero_overlap": true
+}
