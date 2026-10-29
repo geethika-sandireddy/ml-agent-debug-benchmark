@@ -17,6 +17,11 @@ HIDDEN_SEED = 9999
 HIDDEN_SIZE = 400
 
 
+def get_seed(default: int = 0) -> int:
+    """Seed for this run (the environment/tests set SEED)."""
+    return int(os.environ.get("SEED", default))
+
+
 def set_determinism(seed: int) -> None:
     random.seed(seed)
     np.random.seed(seed)

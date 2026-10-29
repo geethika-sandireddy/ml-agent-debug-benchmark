@@ -4,7 +4,7 @@ import torch.nn as nn
 
 import common
 
-SEED = 0
+SEED = common.get_seed()
 common.set_determinism(SEED)
 X, y, order = common.load_pool(SEED)
 train_idx = order[:150]
