@@ -12,7 +12,7 @@ from pydantic import BaseModel, Field
 
 from grader import grade_workload
 from sandbox.runner import RunResult, run_script
-from workloads import diagnosis_labels, list_workloads, load_config, prepare
+from workloads import diagnosis_labels, list_workloads, load_config, prepare, public_id, resolve
 
 MAX_STEPS = 15
 MAX_RUNS = 3
@@ -69,7 +69,7 @@ class RealMLDebugEnv:
     # --- lifecycle ---
     def reset(self, task_id: str | None = None, seed: int = 0) -> RealObservation:
         self.close()
-        self.task_id = task_id or list_workloads()[0]
+        self.task_id = resolve(task_id) if task_id else list_workloads()[0]
         cfg = load_config(self.task_id)
         self.seed = seed
         self._tmp = Path(tempfile.mkdtemp(prefix="mlenv_"))
@@ -91,7 +91,7 @@ class RealMLDebugEnv:
         files = sorted(p.name for p in self.workdir.iterdir() if p.is_file() and p.suffix == ".py") if self.workdir else []
         last = self.last
         return RealObservation(
-            task_id=self.task_id or "",
+            task_id=public_id(self.task_id) if self.task_id else "",
             description=load_config(self.task_id)["symptom"] if self.task_id else "",
             files=files,
             log_tail=(last.stdout[-1200:] + last.stderr[-600:]) if last else "",
@@ -105,7 +105,7 @@ class RealMLDebugEnv:
         )
 
     def state(self) -> dict[str, Any]:
-        return {"task_id": self.task_id, "steps_used": self.steps, "edits": self.edits,
+        return {"task_id": public_id(self.task_id) if self.task_id else None, "steps_used": self.steps, "edits": self.edits,
                 "runs": self.runs, "max_steps": MAX_STEPS, "max_runs": MAX_RUNS, "done": self.done}
 
     # --- stepping ---

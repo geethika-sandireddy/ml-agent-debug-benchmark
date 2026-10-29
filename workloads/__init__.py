@@ -16,6 +16,19 @@ def list_workloads() -> list[str]:
     return sorted(p.name for p in ROOT.iterdir() if (p / "config.json").exists())
 
 
+def public_id(name: str) -> str:
+    """Neutral id shown to agents (task_1..task_N); the folder name can reveal the bug."""
+    return f"task_{list_workloads().index(name) + 1}"
+
+
+def resolve(task: str) -> str:
+    """Accept either a public id (task_3) or an internal folder name."""
+    for n in list_workloads():
+        if task in (n, public_id(n)):
+            return n
+    raise KeyError(f"Unknown workload '{task}'")
+
+
 def load_config(name: str) -> dict:
     path = ROOT / name / "config.json"
     if not path.exists():
