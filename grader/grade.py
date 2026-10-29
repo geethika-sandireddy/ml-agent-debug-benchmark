@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from sandbox.runner import run_script
-from workloads import PROTECTED_FILES, SHARED, load_config, prepare, protected_hashes
+from workloads import PROTECTED_FILES, load_config, prepare, protected_hashes
 
 FORBIDDEN_IMPORTS = {
     "os", "sys", "subprocess", "importlib", "builtins", "ctypes", "shutil", "pathlib",

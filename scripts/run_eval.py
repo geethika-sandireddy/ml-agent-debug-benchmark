@@ -12,9 +12,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from baselines import llm_agent, scripted  # noqa: E402
-from env.real_env import RealMLDebugEnv  # noqa: E402
-from workloads import list_workloads  # noqa: E402
+from baselines import llm_agent, scripted
+from env.real_env import RealMLDebugEnv
+from workloads import list_workloads
 
 AGENTS = {"noop": scripted.run_noop, "oracle": scripted.run_oracle, "llm": llm_agent.run_llm}
 
