@@ -37,14 +37,14 @@ def runs(request, tmp_path_factory):
 
 def test_runs_succeed_and_are_fast(runs):
     _, res = runs
-    for (_variant, _seed), (r, _hidden, secs) in res.items():
+    for r, _hidden, secs in res.values():
         assert r.ok, r.stderr
         assert secs < MAX_SECONDS
 
 
 def test_runs_are_deterministic_per_seed(runs, tmp_path):
     name, res = runs
-    r2, hidden2, _ = _run(name, "buggy", 0, tmp_path)
+    _r2, hidden2, _ = _run(name, "buggy", 0, tmp_path)
     assert hidden2["hidden_acc"] == res[("buggy", 0)][1]["hidden_acc"]
 
 
