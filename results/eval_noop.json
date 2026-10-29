@@ -1,0 +1,21 @@
+{
+  "agent": "noop",
+  "seeds": 1,
+  "rewards": {
+    "double_softmax": [
+      0.0
+    ],
+    "leakage": [
+      0.0
+    ],
+    "missing_eval": [
+      0.0
+    ],
+    "norm_mismatch": [
+      0.0
+    ],
+    "scheduler_bug": [
+      0.0
+    ]
+  }
+}

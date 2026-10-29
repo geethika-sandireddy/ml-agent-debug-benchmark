@@ -1,0 +1,21 @@
+{
+  "agent": "oracle",
+  "seeds": 1,
+  "rewards": {
+    "double_softmax": [
+      0.979
+    ],
+    "leakage": [
+      0.979
+    ],
+    "missing_eval": [
+      0.979
+    ],
+    "norm_mismatch": [
+      0.971
+    ],
+    "scheduler_bug": [
+      0.971
+    ]
+  }
+}
