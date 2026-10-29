@@ -1,0 +1,10 @@
+{
+  "id": "norm_mismatch",
+  "title": "Normalization mismatch",
+  "symptom": "Train accuracy is high but validation accuracy is far lower",
+  "diagnosis": "normalization_mismatch",
+  "seed": 0,
+  "metric": "hidden_acc",
+  "threshold": null,
+  "require_zero_overlap": false
+}

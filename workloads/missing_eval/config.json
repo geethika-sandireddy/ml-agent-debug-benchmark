@@ -1,0 +1,10 @@
+{
+  "id": "missing_eval",
+  "title": "Missing model.eval()",
+  "symptom": "Validation accuracy is noisy and lower than expected",
+  "diagnosis": "missing_eval_mode",
+  "seed": 0,
+  "metric": "hidden_acc",
+  "threshold": null,
+  "require_zero_overlap": false
+}

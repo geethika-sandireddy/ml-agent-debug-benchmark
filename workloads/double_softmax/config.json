@@ -1,0 +1,10 @@
+{
+  "id": "double_softmax",
+  "title": "Double softmax",
+  "symptom": "Training loss barely moves and accuracy plateaus low",
+  "diagnosis": "double_softmax",
+  "seed": 0,
+  "metric": "hidden_acc",
+  "threshold": null,
+  "require_zero_overlap": false
+}
