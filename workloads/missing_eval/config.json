@@ -5,6 +5,6 @@
   "diagnosis": "missing_eval_mode",
   "seed": 0,
   "metric": "hidden_acc",
-  "threshold": null,
+  "threshold": 0.945,
   "require_zero_overlap": false
 }

@@ -11,7 +11,7 @@ norm = lambda a: (a - mean) / std
 
 model = nn.Sequential(nn.Linear(64, 64), nn.ReLU(), nn.Dropout(0.3), nn.Linear(64, 10))
 loss_fn = nn.CrossEntropyLoss()
-opt = torch.optim.Adam(model.parameters(), lr=1e-3)
+opt = torch.optim.Adam(model.parameters(), lr=3e-4)
 
 for epoch in range(1, 13):
     model.train()

@@ -5,6 +5,6 @@
   "diagnosis": "double_softmax",
   "seed": 0,
   "metric": "hidden_acc",
-  "threshold": null,
+  "threshold": 0.74,
   "require_zero_overlap": false
 }
