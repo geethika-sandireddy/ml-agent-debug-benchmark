@@ -16,10 +16,13 @@ dependencies = [
   "openenv-core>=0.2.0",
   "PyYAML==6.0.1",
   "requests==2.32.2",
+  "torch>=2.2",
+  "scikit-learn>=1.4",
+  "numpy>=1.26",
 ]
 
 [project.scripts]
 server = "server.app:main"
 
 [tool.setuptools]
-packages = ["env", "server", "sandbox"]
+packages = ["env", "server", "sandbox", "grader", "workloads", "baselines"]
