@@ -12,7 +12,14 @@ from pydantic import BaseModel, Field
 
 from grader import grade_workload
 from sandbox.runner import RunResult, run_script
-from workloads import diagnosis_labels, list_workloads, load_config, prepare, public_id, resolve
+from workloads import (
+    diagnosis_labels,
+    list_workloads,
+    load_config,
+    prepare,
+    public_id,
+    resolve,
+)
 
 MAX_STEPS = 15
 MAX_RUNS = 3
