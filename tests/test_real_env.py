@@ -19,7 +19,8 @@ def test_reset_shows_real_output_without_leaking_answers(env):
     assert "train.py" in obs.files and "config.json" not in obs.files
     assert obs.metric_summary != "(no metrics)"
     cfg = load_config("double_softmax")
-    assert cfg["diagnosis"] not in obs.model_dump_json().replace("diagnosis_options", "")
+    visible = obs.model_dump_json(exclude={"diagnosis_options"})
+    assert cfg["diagnosis"] not in visible and obs.task_id == "task_1"
     assert "BUG" not in env.step(RealAction(action_type="read_file", path="train.py")).observation.content
 
 
