@@ -22,4 +22,4 @@ dependencies = [
 server = "server.app:main"
 
 [tool.setuptools]
-packages = ["env", "server"]
+packages = ["env", "server", "sandbox"]
