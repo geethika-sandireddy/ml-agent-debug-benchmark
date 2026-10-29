@@ -1,7 +1,7 @@
 """Run a workload script in a throwaway directory with a timeout and resource limits.
 
 NOT a security boundary: it limits runaway scripts, it does not stop a malicious one.
-CPU/memory limits use `resource` and only apply on Linux/macOS; on Windows only the
+CPU/heap limits use `resource` (RLIMIT_DATA, because RLIMIT_AS breaks loading torch) and only apply on Linux/macOS; on Windows only the
 timeout applies.
 """
 
@@ -46,7 +46,7 @@ def _limits(mem_bytes: int, cpu_s: int):
         if resource is None:
             return
         resource.setrlimit(resource.RLIMIT_CPU, (cpu_s, cpu_s))
-        resource.setrlimit(resource.RLIMIT_AS, (mem_bytes, mem_bytes))
+        resource.setrlimit(resource.RLIMIT_DATA, (mem_bytes, mem_bytes))
 
     return apply
 
