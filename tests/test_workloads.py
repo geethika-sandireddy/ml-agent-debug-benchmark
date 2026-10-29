@@ -30,7 +30,7 @@ def runs(request, tmp_path_factory):
     name = request.param
     tmp = tmp_path_factory.mktemp(name)
     jobs = [(v, s) for v in ("buggy", "fixed") for s in SEEDS]
-    with ThreadPoolExecutor(max_workers=4) as ex:
+    with ThreadPoolExecutor(max_workers=1) as ex:  # serial so timings are fair
         results = list(ex.map(lambda j: _run(name, j[0], j[1], tmp), jobs))
     return name, {j: r for j, r in zip(jobs, results, strict=True)}
 
