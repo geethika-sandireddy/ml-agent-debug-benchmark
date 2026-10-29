@@ -5,6 +5,6 @@
   "diagnosis": "scheduler_per_batch",
   "seed": 0,
   "metric": "hidden_acc",
-  "threshold": null,
+  "threshold": 0.9,
   "require_zero_overlap": false
 }

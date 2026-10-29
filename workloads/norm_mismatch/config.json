@@ -5,6 +5,6 @@
   "diagnosis": "normalization_mismatch",
   "seed": 0,
   "metric": "hidden_acc",
-  "threshold": null,
+  "threshold": 0.93,
   "require_zero_overlap": false
 }
