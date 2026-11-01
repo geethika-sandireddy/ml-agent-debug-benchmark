@@ -1,3 +1,4 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 fastapi==0.111.0
 uvicorn==0.30.1
 pydantic==2.7.1
@@ -5,3 +6,6 @@ openai>=2.7.2
 openenv-core>=0.2.0
 PyYAML==6.0.1
 requests==2.32.2
+torch>=2.2
+scikit-learn>=1.4
+numpy>=1.26

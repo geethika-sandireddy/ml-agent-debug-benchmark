@@ -24,7 +24,59 @@ OpenEnv-compatible RL environment for evaluating whether an LLM agent can debug 
 
 **Live Space:** [geetss-ml-debug-env.hf.space](https://geetss-ml-debug-env.hf.space)
 
-## Architecture
+## v2: real PyTorch workloads
+
+In v1 the agent was shown scripted logs. In v2 (`mode: "real"`) every task is a real PyTorch
+training script with one injected bug. The environment runs it, shows the agent the real
+output, lets it read and edit the code and rerun, then grades whether the bug was actually
+fixed. The v1 simulator is still available as the default `legacy` mode.
+
+| Task | Symptom | Bug | Fix |
+|---|---|---|---|
+| double_softmax | slow learning, low plateau | softmax before `CrossEntropyLoss` | remove the softmax |
+| norm_mismatch | validation far below training | validation inputs not normalized | normalize validation (and prediction) inputs |
+| leakage | validation looks too good vs held-out data | validation reuses training rows | disjoint validation rows |
+| scheduler_bug | learning rate decays to ~0, loss flatlines | `scheduler.step()` every batch | step once per epoch |
+| missing_eval | noisy, lower validation accuracy | `model.eval()` never called, dropout stays on | call `model.eval()` |
+
+Agents see neutral ids (`task_1` to `task_5`). Actions: `read_file`, `edit_file`,
+`run_training`, `inspect_metrics`, `submit_diagnosis`. Episodes are capped at 15 steps and 3 runs.
+
+**Reward** (deterministic): 0.3 for the correct diagnosis label, 0.6 for a verified fix, up to 0.1
+efficiency bonus when fixed. A fix is verified by rerunning the final `train.py` in a clean copy
+with a pristine helper and checking accuracy on a hidden test split (and zero train/validation
+overlap for `leakage`). Editing the protected helper, or using forbidden names or imports
+(for example reading the hidden data), scores 0.
+
+**Measured evidence** (`tests/test_workloads.py`, 5 seeds): for every bug the buggy script is worse
+than the fixed one, and the pass thresholds in `workloads/*/config.json` sit between the best buggy
+run and the worst fixed run on hidden-test accuracy. For `leakage` the measured effect is inflated
+validation accuracy and non-zero overlap; hidden accuracy is unchanged by design.
+
+**Baselines** (`python scripts/run_eval.py`, 1 seed per task):
+
+| agent | double_softmax | leakage | missing_eval | norm_mismatch | scheduler_bug | mean |
+|---|---|---|---|---|---|---|
+| noop | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| oracle | 0.98 | 0.98 | 0.98 | 0.97 | 0.97 | 0.98 |
+| llm | not run | not run | not run | not run | not run | not run |
+
+The no-op agent is the floor and the scripted oracle (applies the known fix) is the ceiling.
+The LLM agent was **not run** because no API key was available when these results were produced.
+Set `OPENAI_API_KEY` (and optionally `OPENAI_BASE_URL`, `MODEL_NAME`) and rerun to fill that row.
+
+**Reproduce**: `pip install -r requirements.txt pytest && pytest` (the workload tests take several
+minutes because each run starts PyTorch), then `python scripts/run_eval.py --seeds 3`.
+
+**v2 limitations**
+- The sandbox is a timeout plus CPU and heap limits, not a security boundary. Limits apply on
+  Linux and macOS only; on Windows only the timeout applies.
+- The source guard in the grader is a benchmark guardrail, not a proof against a determined attacker.
+- Baseline numbers use 1 seed per task; thresholds were set from 5 measured seeds.
+- Each workload is a tiny MLP on scikit-learn digits, so the tasks are small by design.
+- The Hugging Face Space has not been updated or checked for torch memory use on its free tier.
+
+## Architecture (v1 legacy simulator)
 
 ```mermaid
 graph TD
