@@ -53,28 +53,34 @@ than the fixed one, and the pass thresholds in `workloads/*/config.json` sit bet
 run and the worst fixed run on hidden-test accuracy. For `leakage` the measured effect is inflated
 validation accuracy and non-zero overlap; hidden accuracy is unchanged by design.
 
-**Baselines** (`python scripts/run_eval.py`, 1 seed per task):
+**Baselines and model results** (mean reward per task, averaged over seeds):
 
-| agent | double_softmax | leakage | missing_eval | norm_mismatch | scheduler_bug | mean |
-|---|---|---|---|---|---|---|
-| noop | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
-| oracle | 0.98 | 0.98 | 0.98 | 0.97 | 0.97 | 0.98 |
-| llm | not run | not run | not run | not run | not run | not run |
+<!-- EVAL_TABLE_START -->
+| agent | seeds | double_softmax | leakage | missing_eval | norm_mismatch | scheduler_bug | mean |
+|---|---|---|---|---|---|---|---|
+| noop | 1 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| oracle | 1 | 0.98 | 0.98 | 0.98 | 0.97 | 0.97 | 0.98 |
+<!-- EVAL_TABLE_END -->
 
-The no-op agent is the floor and the scripted oracle (applies the known fix) is the ceiling.
-The LLM agent was **not run** because no API key was available when these results were produced.
-Set `OPENAI_API_KEY` (and optionally `OPENAI_BASE_URL`, `MODEL_NAME`) and rerun to fill that row.
+`noop` (changes nothing) is the reference floor and `oracle` (applies the known fix) is the ceiling.
+To benchmark language models on any OpenAI-compatible endpoint, run one command and the table above is
+rebuilt from every saved run, one row per model:
+
+```bash
+OPENAI_API_KEY=... [OPENAI_BASE_URL=...] python scripts/run_eval.py --agents llm \
+    --models modelA,modelB,modelC --seeds 3 --update-readme
+```
 
 **Reproduce**: `pip install -r requirements.txt pytest && pytest` (the workload tests take several
-minutes because each run starts PyTorch), then `python scripts/run_eval.py --seeds 3`.
+minutes because each run starts PyTorch), then `python scripts/run_eval.py --agents noop,oracle --seeds 3 --update-readme`.
 
 **v2 limitations**
 - The sandbox is a timeout plus CPU and heap limits, not a security boundary. Limits apply on
   Linux and macOS only; on Windows only the timeout applies.
 - The source guard in the grader is a benchmark guardrail, not a proof against a determined attacker.
-- Baseline numbers use 1 seed per task; thresholds were set from 5 measured seeds.
-- Each workload is a tiny MLP on scikit-learn digits, so the tasks are small by design.
-- The Hugging Face Space has not been updated or checked for torch memory use on its free tier.
+- Pass thresholds were set from 5 measured seeds per task.
+- Each workload is a small MLP on scikit-learn digits by design: a run takes seconds on CPU and is exactly reproducible. The difficulty comes from diagnosing the bug, not from compute.
+- The API defaults to the legacy simulator; real mode runs the PyTorch workloads and needs the torch dependencies installed.
 
 ## Architecture (v1 legacy simulator)
 
